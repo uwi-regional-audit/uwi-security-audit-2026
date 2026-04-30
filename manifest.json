@@ -1,15 +1,11 @@
 {
-"name": "UWI Security Audit",
-"short_name": "UWI Audit",
-"start_url": "index.html",
+"name": "National Security Audit 2026",
+"short_name": "SafetySync",
+"start_url": "/index.html",
 "display": "standalone",
-"background_color": "#002147",
-"theme_color": "#002147",
+"background_color": "#003366",
+"theme_color": "#003366",
 "icons": [
-{
-"src": "https://mona.uwi.edu/sites/all/themes/uwi_mona/logo.png",
-"sizes": "192x192",
-"type": "image/png"
-}
+{ "src": "https://www.mona.uwi.edu/sites/all/themes/uwi_mona/logo.png", "sizes": "192x192", "type": "image/png" }
 ]
 }
